@@ -5,6 +5,8 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
+// Next component
+import Head from "next/head";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -12,6 +14,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
+      <Head>
+        <title>React Twitter</title>
+        <meta name="description" content="This is a Twitter Clone" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Component {...pageProps} />
     </SessionProvider>
   );
