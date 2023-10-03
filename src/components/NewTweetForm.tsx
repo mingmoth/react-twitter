@@ -1,12 +1,25 @@
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 // components
 import Button from '~/components/button';
 import ProfileImage from './ProfileImage';
 
+function updateTextAreaSize(textArea?: HTMLTextAreaElement) {
+    if(textArea == null) return;
+
+    textArea.style.height = "0"
+    textArea.style.height = `${ textArea.scrollHeight }px`
+}
+
 export default function NewTweetForm() {
     const session = useSession();
     const [inputValue, setInputValue] = useState("")
+    const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
+    useLayoutEffect(() => {
+        if(textAreaRef.current === null) return
+        updateTextAreaSize(textAreaRef.current)
+    }, [inputValue])
 
     if(session.status !== 'authenticated') return
 
@@ -18,6 +31,7 @@ export default function NewTweetForm() {
             <div className="flex gap-2">
                 <ProfileImage src={session.data.user.image} />
                 <textarea
+                    ref={textAreaRef}
                     name="newTweet"
                     id="newTweet"
                     value={inputValue}
