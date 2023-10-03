@@ -58,5 +58,30 @@ export const tweetRouter = createTRPCRouter({
           }
         }
       })
+
+      let nextCursor: typeof cursor | undefined
+      if(tweets.length > limit) {
+        const lastTweet = tweets.pop()
+        if(lastTweet != null) {
+          nextCursor = {
+            id: lastTweet?.id,
+            createdAt: lastTweet?.createdAt,
+          }
+        }
+      }
+
+      return {
+        tweets: tweets.map(tweet => {
+          return {
+            id: tweet.id,
+            content: tweet.content,
+            createdAt: tweet.createdAt,
+            likeCount: tweet._count.likes,
+            likedByMe: tweet.likes?.length > 0,
+            user: tweet.user,
+          }
+        }),
+        nextCursor
+      }
     })
 });
