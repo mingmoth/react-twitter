@@ -7,6 +7,8 @@ await import("./src/env.mjs");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
+  // Error: Invalid src prop (hostname: 'cdn.discordapp.com' is not configured under images in next.config.js)
+  images: { domains: ["cdn.discordapp.com"]},
 
   /**
    * If you are using `appDir` then you must comment the below `i18n` config out.
