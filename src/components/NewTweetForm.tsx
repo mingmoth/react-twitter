@@ -1,9 +1,12 @@
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
+// components
 import Button from '~/components/button';
 import ProfileImage from './ProfileImage';
 
 export default function NewTweetForm() {
     const session = useSession();
+    const [inputValue, setInputValue] = useState("")
 
     if(session.status !== 'authenticated') return
 
@@ -17,6 +20,8 @@ export default function NewTweetForm() {
                 <textarea
                     name="newTweet"
                     id="newTweet"
+                    value={inputValue}
+                    onChange={ e => setInputValue(e.target.value) }
                     className="flex-grow resize-none overflow-hidden p-2 text-lg outline-none"
                     placeholder="What's happening?"
                 ></textarea>
