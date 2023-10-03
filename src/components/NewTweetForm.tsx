@@ -6,7 +6,7 @@ export default function NewTweetForm() {
     const session = useSession();
 
     if(session.status !== 'authenticated') return
-    const user = session.data?.user
+
     return (
         <form
             action=""
