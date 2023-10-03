@@ -52,8 +52,8 @@ model User {
     // Non Next-Auth
     tweets        Tweet[]
     likes         Like[]
-    followers User[] @relation(name: "Followers")
-    follows User[] @relation(name: "Followers")
+    followers     User[]    @relation(name: "Followers")
+    follows       User[]    @relation(name: "Followers")
 }
 
 model VerificationToken {
@@ -73,6 +73,7 @@ model Tweet {
     user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     likes Like[]
 
+    @@unique([createdAt, id])
     @@index([userId])
 }
 
