@@ -1,20 +1,9 @@
-type Tweet = {
-    id: string
-    content: string
-    createdAt: Date
-    likeCount: number
-    likedByMe: boolean
-    user: {
-        id: string
-        image: string | null
-        name: string | null
-    }
-}
+import InfiniteScroll from "react-infinite-scroll-component"
 
 type InfiniteTweetListProps = {
     isLoading: boolean
     isError: boolean
-    hasMore: boolean | undefined
+    hasMore: boolean
     fetchNewTweets: () => Promise<unknown>
     tweets?: Tweet[]
 }
@@ -41,11 +30,21 @@ export default function InfiniteTweetList({
     }
     return (
         <ul>
-            {tweets.map((tweet) => {
-                return (
-                    <li key={tweet.id}>{ tweet?.content }</li>
-                )
-            })}
+            <InfiniteScroll
+                dataLength={tweets?.length}
+                hasMore={hasMore}
+                next={fetchNewTweets}
+                loader={"Loading..."}
+            >
+                {tweets.map((tweet) => {
+                    return (
+                        <TweetCard
+                            key={tweet.id}
+                            {...tweet}
+                        />
+                    )
+                })}
+            </InfiniteScroll>
         </ul>
     )
 }
