@@ -9,7 +9,7 @@ const TABS = ["Recent", "Following"] as const;
 export default function HomeTweetsSection() {
     const session = useSession();
 
-  const [selectTab, setSelectedTab] = useState<(typeof TABS)[number]>("Recent");
+    const [selectTab, setSelectedTab] = useState<(typeof TABS)[number]>("Recent");
     const tweets = api.tweet.infiniteFeed.useInfiniteQuery(
         {},
         { getNextPageParam: (lastPage) => lastPage.nextCursor },
@@ -18,25 +18,25 @@ export default function HomeTweetsSection() {
     return (
         <>
             {session.status === "authenticated" && (
-        <div
-          className="w-full flex border-b border-b-gray-200"
-        >
-          {TABS.map((tab) => {
-            return (
-              <button
-                className={`px-4 py-2 hover:bg-gray-200 focus-visible:bg-gray-200 ${tab === selectTab
-                    ? "border-b-4 border-b-blue-500 font-bold"
-                    : ""
-                  }`}
-                key={tab}
-                onClick={() => setSelectedTab(tab)}
-              >
-                {tab}
-              </button>
-            );
-          })}
-        </div>
-      )}
+                <div
+                    className="w-full flex border-b border-b-gray-200"
+                >
+                    {TABS.map((tab) => {
+                        return (
+                            <button
+                                className={`px-4 py-2 hover:bg-gray-200 focus-visible:bg-gray-200 ${tab === selectTab
+                                    ? "border-b-4 border-b-blue-500 font-bold"
+                                    : ""
+                                    }`}
+                                key={tab}
+                                onClick={() => setSelectedTab(tab)}
+                            >
+                                {tab}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
             <InfiniteTweetList
                 tweets={tweets.data?.pages.flatMap((page) => page.tweets)}
                 isError={tweets.isError}
