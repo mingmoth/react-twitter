@@ -18,10 +18,10 @@ export default function InfiniteTweetList({
     hasMore
 }: InfiniteTweetListProps) {
     if(isLoading) {
-        return <h1>Loading...</h1>
+        return <div className="p-4">Loading...</div>
     }
     if(isError) {
-        return <h1>Error...</h1>
+        return <div className="p-4">Error...</div>
     }
     if(tweets == null || tweets?.length === 0) {
         return (
