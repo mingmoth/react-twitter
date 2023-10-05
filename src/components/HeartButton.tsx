@@ -1,20 +1,29 @@
 import { useSession } from "next-auth/react"
+import { api } from "~/utils/api"
 // react-icons
 import { VscHeart, VscHeartFilled } from "react-icons/vsc"
 // components
 import HoverEffect from "./hover/HoverEffect"
 
 type HeartButtonProps = {
+    id: string
     likeCount: number
     likedByMe: boolean
 }
 
 export default function HeartButton({
+    id,
     likeCount,
     likedByMe
 }: HeartButtonProps) {
     const session = useSession()
     const HeartIcon = likedByMe ? VscHeartFilled : VscHeart
+
+    const toggleLike = api.tweet.toggleLike.useMutation()
+
+    function handleToggleLike() {
+        toggleLike.mutate({ id })
+    }
 
     if(session.status !== 'authenticated') {
         return (
@@ -26,7 +35,11 @@ export default function HeartButton({
     }
 
     return (
-        <button className="w-fit">
+        <button
+            className="w-fit"
+            disabled={toggleLike.isLoading}
+            onClick={handleToggleLike}
+        >
             <div
                 className={`group -ml-2 flex items-center gap-1 self-start transition-colors duration-200 ${
                     likedByMe
