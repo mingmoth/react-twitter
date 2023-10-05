@@ -48,6 +48,7 @@ export default function TweetCard({
                 </div>
                 <p className="whitespace-pre-wrap">{content}</p>
                 <HeartButton
+                    id={id}
                     likeCount={likeCount}
                     likedByMe={likedByMe}
                 />
