@@ -1,5 +1,6 @@
 import Link from "next/link"
 import ProfileImage from "./ProfileImage"
+import { dateTimeFormatter } from '~/helpers/date';
 
 export type Tweet = {
     id: string
@@ -39,8 +40,10 @@ export default function TweetCard({
                     >
                         {user.name}
                     </Link>
+                    <span className="text-gray-500">-</span>
+                    <span className="text-gray-500">{dateTimeFormatter.format(createdAt)}</span>
                 </div>
-                { content }
+                <p className="whitespace-pre-wrap">{content}</p>
             </div>
         </li>
     )
