@@ -1,5 +1,8 @@
 import Link from "next/link"
+// components
 import ProfileImage from "./ProfileImage"
+import HeartButton from "./HeartButton";
+// helpers
 import { dateTimeFormatter } from '~/helpers/date';
 
 export type Tweet = {
@@ -44,6 +47,7 @@ export default function TweetCard({
                     <span className="text-gray-500">{dateTimeFormatter.format(createdAt)}</span>
                 </div>
                 <p className="whitespace-pre-wrap">{content}</p>
+                <HeartButton />
             </div>
         </li>
     )
