@@ -47,7 +47,10 @@ export default function TweetCard({
                     <span className="text-gray-500">{dateTimeFormatter.format(createdAt)}</span>
                 </div>
                 <p className="whitespace-pre-wrap">{content}</p>
-                <HeartButton />
+                <HeartButton
+                    likeCount={likeCount}
+                    likedByMe={likedByMe}
+                />
             </div>
         </li>
     )
