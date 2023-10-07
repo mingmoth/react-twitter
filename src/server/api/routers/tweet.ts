@@ -115,6 +115,29 @@ export const tweetRouter = createTRPCRouter({
       })
     }),
 
+  infiniteProfileFeed: publicProcedure
+    .input(z.object({
+      cursor: z.object({
+        id: z.string(),
+        createdAt: z.date()
+      }).optional(),
+      limit: z.number().optional(),
+      userId: z.string(),
+    }))
+    .query(async ({
+      input: { cursor, limit = 10, userId }, ctx
+    }) => {
+
+      return await getInfiniteTweets({
+        ctx,
+        cursor,
+        limit,
+        whereClause: {
+          userId
+        }
+      })
+    }),
+
   toggleLike: protectedProcedure
     .input(z.object({
       id: z.string()
