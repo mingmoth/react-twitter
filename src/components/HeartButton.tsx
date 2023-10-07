@@ -8,13 +8,19 @@ import HoverEffect from "./hover/HoverEffect"
 type HeartButtonProps = {
     id: string
     likeCount: number
-    likedByMe: boolean
+    likedByMe: boolean,
+    user: {
+        id: string
+        image: string | null
+        name: string | null
+    }
 }
 
 export default function HeartButton({
     id,
     likeCount,
-    likedByMe
+    likedByMe,
+    user,
 }: HeartButtonProps) {
     const session = useSession()
     const HeartIcon = likedByMe ? VscHeartFilled : VscHeart
@@ -50,6 +56,12 @@ export default function HeartButton({
 
             }
             trpcUtils.tweet.infiniteFeed.setInfiniteData({}, updateData)
+            trpcUtils.tweet.infiniteFeed.setInfiniteData({
+                onlyFollowing: true
+            }, updateData)
+            trpcUtils.tweet.infiniteProfileFeed.setInfiniteData({
+                userId: user.id
+            }, updateData)
         }
     })
 
