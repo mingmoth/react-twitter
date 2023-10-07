@@ -51,6 +51,7 @@ export default function TweetCard({
                     id={id}
                     likeCount={likeCount}
                     likedByMe={likedByMe}
+                    user={user}
                 />
             </div>
         </li>
