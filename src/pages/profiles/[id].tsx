@@ -7,6 +7,7 @@ import Link from "next/link";
 import { VscArrowLeft } from "react-icons/vsc";
 import ProfileImage from "~/components/ProfileImage";
 import HoverEffect from "~/components/hover/HoverEffect";
+import { getPlural } from "~/helpers/plural";
 
 
 const ProfilePage: NextPage<InferGetServerSidePropsType<typeof getStaticProps>> = ({
@@ -34,6 +35,14 @@ const ProfilePage: NextPage<InferGetServerSidePropsType<typeof getStaticProps>> 
                     </HoverEffect>
                 </Link>
                 <ProfileImage src={user.image} className="flex-shrink-0"/>
+                <div className="ml-4 flex-grow">
+                    <h1 className="text-lg font-bold">{user.name}</h1>
+                    <div className="text-grey-500 flex flex-wrap">
+                        <div className="mr-2">{user.tweetsCount}{" "}{getPlural(user.tweetsCount, "Tweet", "Tweets")}</div>
+                        <div className="mr-2">{user.followersCount}{" "}{getPlural(user.followersCount, "Follower", "Followers")}</div>
+                        <div>{user.followsCount}{" Following"}</div>
+                    </div>
+                </div>
             </header>
             <div className="px-4 py-2">{user.name}</div>
         </>
