@@ -1,8 +1,13 @@
 import type { GetServerSidePropsContext, GetStaticPaths, InferGetServerSidePropsType, NextPage } from "next";
-import ErrorPage from "next/error";
-import Head from "next/head";
 import { ssgHelper } from "~/server/api/sshHelper";
 import { api } from "~/utils/api";
+import ErrorPage from "next/error";
+import Head from "next/head";
+import Link from "next/link";
+import { VscArrowLeft } from "react-icons/vsc";
+import ProfileImage from "~/components/ProfileImage";
+import HoverEffect from "~/components/hover/HoverEffect";
+
 
 const ProfilePage: NextPage<InferGetServerSidePropsType<typeof getStaticProps>> = ({
     id,
@@ -19,10 +24,23 @@ const ProfilePage: NextPage<InferGetServerSidePropsType<typeof getStaticProps>> 
             <Head>
                 <title>{`React Twitter ${user.name}`}</title>
             </Head>
-            <h1>{user.name}</h1>
+            <header
+                className="sticky top-0 z-10 flex items-center border-b bg-white
+                px-2 py-2"
+            >
+                <Link href=".." className="mr-2">
+                    <HoverEffect>
+                        <VscArrowLeft className="h-6 w-6" />
+                    </HoverEffect>
+                </Link>
+                <ProfileImage src={user.image} className="flex-shrink-0"/>
+            </header>
+            <div className="px-4 py-2">{user.name}</div>
         </>
     )
 }
+
+export default ProfilePage;
 
 export const getStaticPaths: GetStaticPaths = () => {
     return {
@@ -52,5 +70,3 @@ export async function getStaticProps(context: GetServerSidePropsContext<{ id: st
         }
     }
 }
-
-export default ProfilePage;
