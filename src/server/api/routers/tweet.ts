@@ -21,14 +21,15 @@ export const tweetRouter = createTRPCRouter({
 
   infiniteFeed: publicProcedure
     .input(z.object({
-      limit: z.number().optional(),
       cursor: z.object({
         id: z.string(),
         createdAt: z.date()
-      }).optional()
+      }).optional(),
+      limit: z.number().optional(),
+      onlyFollowing: z.boolean().optional,
     }))
     .query(async({
-      input: { limit = 10, cursor }, ctx
+      input: { cursor, limit = 10, onlyFollowing = false }, ctx
     }) => {
       const currentUserId = ctx.session?.user.id
 

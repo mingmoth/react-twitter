@@ -11,7 +11,7 @@ export default function HomeTweetsSection() {
 
     const [selectTab, setSelectedTab] = useState<(typeof TABS)[number]>("Recent");
     const tweets = api.tweet.infiniteFeed.useInfiniteQuery(
-        {},
+        { onlyFollowing: selectTab !== TABS[0] },
         { getNextPageParam: (lastPage) => lastPage.nextCursor },
     );
 
