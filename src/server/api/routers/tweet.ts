@@ -1,12 +1,25 @@
+import { Prisma } from "@prisma/client";
+import { inferAsyncReturnType } from "@trpc/server";
 import { z } from "zod";
 
 import {
+  createTRPCContext,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
 
-async function getInfiniteTweets() {
+async function getInfiniteTweets({
+  ctx, cursor, limit, whereClause
+}: {
+  ctx: inferAsyncReturnType<typeof createTRPCContext>,
+  cursor: {
+    id: string,
+    createdAt: Date
+  } | undefined,
+  limit: number,
+  whereClause?: Prisma.TweetWhereInput,
+}) {
   const currentUserId = ctx.session?.user.id
 
   const tweets = await ctx.db.tweet.findMany({
@@ -33,7 +46,8 @@ async function getInfiniteTweets() {
           image: true,
         }
       }
-    }
+    },
+    where: whereClause,
   })
 
   let nextCursor: typeof cursor | undefined
@@ -82,12 +96,13 @@ export const tweetRouter = createTRPCRouter({
         createdAt: z.date()
       }).optional(),
       limit: z.number().optional(),
-      onlyFollowing: z.boolean().optional,
+      onlyFollowing: z.boolean().optional(),
     }))
     .query(async ({
       input: { cursor, limit = 10, onlyFollowing = false }, ctx
     }) => {
       const currentUserId = ctx.session?.user.id
+
       return await getInfiniteTweets({
         ctx,
         cursor,
