@@ -39,6 +39,7 @@ export const profileRouter = createTRPCRouter({
 
             return {
                 name: profile.name,
+                id: id,
                 image: profile.image,
                 followersCount: profile._count.followers,
                 followsCount: profile._count.follows,

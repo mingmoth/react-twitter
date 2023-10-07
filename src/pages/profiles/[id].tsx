@@ -1,4 +1,5 @@
 import type { GetServerSidePropsContext, GetStaticPaths, InferGetServerSidePropsType, NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { ssgHelper } from "~/server/api/sshHelper";
 import { api } from "~/utils/api";
 import { getPlural } from "~/helpers/plural";
@@ -10,17 +11,20 @@ import { VscArrowLeft } from "react-icons/vsc";
 import ProfileImage from "~/components/ProfileImage";
 import HoverEffect from "~/components/hover/HoverEffect";
 import InfiniteTweetList from "~/components/InfiniteTweetList";
-
+import Button from "~/components/button";
 
 const ProfilePage: NextPage<InferGetServerSidePropsType<typeof getStaticProps>> = ({
     id,
 }) => {
+    const session = useSession()
     const { data: user } = api.profile.getById.useQuery( { id })
 
     const tweets = api.tweet.infiniteProfileFeed.useInfiniteQuery(
         { userId: id },
         { getNextPageParam: (lastPage) => lastPage.nextCursor },
     )
+
+    const currentUserId = session.data?.user.id
 
     if(user == null || user.name == null) {
         return (
@@ -50,6 +54,12 @@ const ProfilePage: NextPage<InferGetServerSidePropsType<typeof getStaticProps>> 
                         <div>{user.followsCount}{" Following"}</div>
                     </div>
                 </div>
+                {currentUserId !== user.id
+                    ? <Button gray={user.isFollowing}>
+                        {user.isFollowing ? "Unfollow" : "Follow"}
+                    </Button>
+                    : null
+                }
             </header>
             <main>
                 <InfiniteTweetList
