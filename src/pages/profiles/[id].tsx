@@ -1,19 +1,26 @@
 import type { GetServerSidePropsContext, GetStaticPaths, InferGetServerSidePropsType, NextPage } from "next";
 import { ssgHelper } from "~/server/api/sshHelper";
 import { api } from "~/utils/api";
+import { getPlural } from "~/helpers/plural";
+// components
 import ErrorPage from "next/error";
 import Head from "next/head";
 import Link from "next/link";
 import { VscArrowLeft } from "react-icons/vsc";
 import ProfileImage from "~/components/ProfileImage";
 import HoverEffect from "~/components/hover/HoverEffect";
-import { getPlural } from "~/helpers/plural";
+import InfiniteTweetList from "~/components/InfiniteTweetList";
 
 
 const ProfilePage: NextPage<InferGetServerSidePropsType<typeof getStaticProps>> = ({
     id,
 }) => {
     const { data: user } = api.profile.getById.useQuery( { id })
+
+    const tweets = api.tweet.infiniteProfileFeed.useInfiniteQuery(
+        { userId: id },
+        { getNextPageParam: (lastPage) => lastPage.nextCursor },
+    )
 
     if(user == null || user.name == null) {
         return (
@@ -44,7 +51,15 @@ const ProfilePage: NextPage<InferGetServerSidePropsType<typeof getStaticProps>> 
                     </div>
                 </div>
             </header>
-            <div className="px-4 py-2">{user.name}</div>
+            <main>
+                <InfiniteTweetList
+                    tweets={tweets.data?.pages.flatMap((page) => page.tweets)}
+                    isError={tweets.isError}
+                    isLoading={tweets.isLoading}
+                    hasMore={tweets.hasNextPage || false}
+                    fetchNewTweets={tweets.fetchNextPage}
+                />
+            </main>
         </>
     )
 }
